@@ -26,6 +26,11 @@ public class CommentService {
         return commentRepository.findById(id);
     }
 
+    // 특정 게시글 ID로 댓글 목록 조회
+    public List<Comment> getCommentsByBoardId(Long boardId) {
+        return commentRepository.findByBoardId(boardId);
+    }
+
     // 댓글 생성
     public Comment createComment(Comment comment) {
         return commentRepository.save(comment);
@@ -36,4 +41,5 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 }
+
 

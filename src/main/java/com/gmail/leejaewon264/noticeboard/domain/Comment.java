@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long boardId;
 
     private String content;
     private String writer;
@@ -20,11 +20,11 @@ public class Comment {
 
     // Getters and Setters
     public Long getId() {
-        return id;
+        return boardId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.boardId = id;
     }
 
     public String getContent() {
