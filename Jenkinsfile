@@ -10,7 +10,7 @@ pipeline {
         // 소스 코드 체크아웃 단계
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-username/your-repository.git'
+                git url: 'https://github.com/your-username/your-repository.git', credentialsId: 'github-credentials-id'
             }
         }
 
@@ -31,4 +31,21 @@ pipeline {
 
         // 코드 커버리지 분석 단계 (JaCoCo)
         stage('Code Coverage') {
+            steps {
+                sh './gradlew jacocoTestReport' // JaCoCo 커버리지 리포트 생성
+                jacoco execPattern: '**/build/jacoco/test.exec' // Jenkins에 커버리지 리포트 연동
+            }
+        }
 
+        // Docker 이미지 빌드 및 푸시 단계
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    docker.withRegistry('', 'docker-hub-credentials-id') {
+                        docker.build(DOCKER_IMAGE_NAME).push('latest')
+                    }
+                }
+            }
+        }
+    }
+}
