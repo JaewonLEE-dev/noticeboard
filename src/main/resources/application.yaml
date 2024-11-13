@@ -1,0 +1,28 @@
+# 데이터베이스 설정
+spring:
+  datasource:
+    url: jdbc:mysql://13.209.193.130:3306/myboard?useSSL=false&serverTimezone=UTC
+    username: boardroot
+    password: 2456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update  # 개발 중엔 'update'로 설정해 테이블을 자동 생성 및 업데이트. 운영에서는 다른 옵션 추천.
+    show-sql: true      # SQL 쿼리 로그 출력 (개발 시 편리)
+
+# 페이지네이션 설정
+app:
+  pagination:
+    default-page-size: 10   # 한 페이지에 표시할 게시글 수
+
+# Spring Security 설정
+security:
+  enabled: true             # 권한 관리 활성화
+  roles:
+    admin: ADMIN
+    user: USER
+  permissions:
+    create: [ADMIN, USER]
+    read: [ADMIN, USER, GUEST]   # 모두에게 읽기 권한 부여
+    update: [ADMIN, USER]
+    delete: [ADMIN]
