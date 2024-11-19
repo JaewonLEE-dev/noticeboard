@@ -88,6 +88,8 @@ tasks.named('check') {
 }
 
 checkstyle {
-    toolVersion = '10.12.0' // Checkstyle 버전
-    configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml") // 규칙 파일
+    maxWarnings = 0
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    configProperties = ["suppressionFile":"${rootDir}/config/checkstyle/checkstyle-suppressions.xml"]
+    toolVersion = "8.42"
 }

@@ -40,22 +40,17 @@ pipeline {
           }
        }
 
-       stage("Static Code Analysis"){
-         steps{
-             // 권한 부여
-             sh """
-             chmod -R 755 config/checkstyle/
-             chmod -R 755 build/reports/checkstyle/
-                """
+stage("Static Code Analysis"){
+  steps{
+      sh "./gradlew checkstyleMain"
+          publishHTML(target: [
+                      reportDir: 'build/reports/checkstyle/',
+                      reportFiles: 'main.html',
+                      reportName: 'Checkstyle Report'
+          ])
+  }
+}
 
-             sh "./gradlew checkstyleMain"
-                 publishHTML(target: [
-                             reportDir: 'build/reports/checkstyle/',
-                             reportFiles: 'main.html',
-                             reportName: 'Checkstyle Report'
-                 ])
-         }
-       }
 
         stage('Docker Build & Push') {
             steps {
