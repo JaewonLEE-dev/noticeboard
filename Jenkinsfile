@@ -33,12 +33,12 @@ pipeline {
             }
         }
 
-        stage('Code Coverage') {
-            steps {
-                sh './gradlew jacocoTestReport'
-                jacoco execPattern: '**/build/jacoco/test.exec'
-            }
-        }
+       stage("test coverage"){
+          steps{
+               sh "./gradlew test jacocoTestCoverageVerification"
+               sh "./gradlew test jacocoTestReport"
+          }
+       }
 
         stage('Static Analysis') {
             steps {
