@@ -3,68 +3,50 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub')
+        DOCKER_IMAGE_NAME = 'potato264/noticeboard'
     }
 
     stages {
-        stage('Permission') {
+        stage('Checkout') {
             steps {
-                sh "chmod +x ./gradlew"
+                git url: 'https://github.com/JaewonLEE-dev/noticeboard.git', credentialsId: 'github'
             }
         }
 
-        stage('Compile') {
+        stage('Build') {
             steps {
-                sh "./gradlew compileJava"
+                sh './gradlew clean build'
             }
         }
 
         stage('Test') {
             steps {
-                sh './gradlew clean test'
+                sh './gradlew test'
+                junit '**/build/test-results/test/*.xml'
             }
         }
 
         stage('Code Coverage') {
             steps {
                 sh './gradlew jacocoTestReport'
-                sh "./gradlew test jacocoTestReport"
+                jacoco execPattern: '**/build/jacoco/test.exec'
             }
         }
 
-        stage('Static Code Analysis') {
+        stage('Static Analysis') {
             steps {
-                sh "./gradlew checkstyleMain"
-                    publishHTML(target: [
-                                                 reportDir: 'build/reports/checkstyle/',
-                                                 reportFiles: 'main.html',
-                                                 reportName: 'Checkstyle Report'
+                sh './gradlew sonarqube' // SonarQube를 통한 정적 분석
             }
         }
 
-        stage("Gradle Build"){
-          steps{
-              sh "./gradlew clean build"
-          }
-        }
-
-        stage("Docker Image Build"){
-          steps{
-              sh "docker build -t potato264/noticeboard ."
-          }
-        }
-
-        stage('docker hub login'){
-          steps{
-              sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-          }
-        }
-
-        stage('docker hub push'){
-         steps{
-             sh 'docker push potato264/noticeboard:latest'
-         }
-        }
-
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    docker.withRegistry('', 'docker-hub') {
+                        docker.build(DOCKER_IMAGE_NAME).push('latest')
+                    }
+                }
+            }
         }
     }
 }
