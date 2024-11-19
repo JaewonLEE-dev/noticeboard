@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/JaewonLEE-dev/noticeboard.git', credentialsId: 'github'
+                git url: 'https://github.com/JaewonLEE-dev/noticeboard.git'
             }
         }
 
