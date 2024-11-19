@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials-id')
-        DOCKER_IMAGE_NAME = 'your-dockerhub-username/your-repo-name'
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub')
+        DOCKER_IMAGE_NAME = 'potato264/noticeboard'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/your-username/your-repository.git', credentialsId: 'github-credentials-id'
+                git url: 'https://github.com/JaewonLEE-dev/noticeboard.git', credentialsId: 'github'
             }
         }
 
@@ -42,7 +42,7 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
-                    docker.withRegistry('', 'docker-hub-credentials-id') {
+                    docker.withRegistry('', 'docker-hub') {
                         docker.build(DOCKER_IMAGE_NAME).push('latest')
                     }
                 }
