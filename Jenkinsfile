@@ -6,12 +6,14 @@ pipeline {
         DOCKER_IMAGE_NAME = 'potato264/noticeboard'
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', git url: 'https://github.com/JaewonLEE-dev/noticeboard.git', credentialsId: 'github'
-            }
+stages {
+    stage('Checkout') {
+        steps {
+            git branch: 'main', url: 'https://github.com/JaewonLEE-dev/noticeboard.git', credentialsId: 'github'
         }
+    }
+}
+
 
         stage('Build') {
             steps {
