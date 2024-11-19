@@ -42,6 +42,12 @@ pipeline {
 
        stage("Static Code Analysis"){
          steps{
+             // 권한 부여
+             sh """
+             chmod -R 755 config/checkstyle/
+             chmod -R 755 build/reports/checkstyle/
+                """
+
              sh "./gradlew checkstyleMain"
                  publishHTML(target: [
                              reportDir: 'build/reports/checkstyle/',
